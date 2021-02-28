@@ -49,6 +49,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button safeSplit = findViewById(R.id.split2);
+
+        safeSplit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkPermissions();
+
+                Display display = getWindowManager().getDefaultDisplay();
+                int screenHeight = display.getHeight();
+
+                SplitThread thread = new SplitThread(screenHeight, MainActivity.this);
+                thread.setSafe();
+                thread.start();
+            }
+        });
+
         Button clean = findViewById(R.id.clean);
 
         clean.setOnClickListener(new View.OnClickListener() {

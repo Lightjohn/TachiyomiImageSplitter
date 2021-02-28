@@ -24,7 +24,7 @@ import static com.example.fileresizer.ThreadUtils.updateBar;
 import static com.example.fileresizer.ThreadUtils.updateText;
 
 class SplitThread extends Thread {
-    final int SPLIT_THREADS = 4;
+    int SPLIT_THREADS = 4;
     int expectedHeight;
     Activity activity;
 
@@ -53,6 +53,10 @@ class SplitThread extends Thread {
         } catch (IOException e) {
             System.out.println("ERROR " + e);
         }
+    }
+
+    public void setSafe() {
+        SPLIT_THREADS = 1;
     }
 
     private int[] getImageSizeWithoutLoading(String imagePath) {
@@ -144,7 +148,7 @@ class SplitThread extends Thread {
             e.printStackTrace();
         }
 
-        String errInfo = count[1] == 0 ? "" : String.format(Locale.ENGLISH, "There was %d errors", count[1]);
+        String errInfo = count[1] == 0 ? "" : String.format(Locale.ENGLISH, "There was %d errors\nPlease re run with SAFE split", count[1]);
         String info = String.format(Locale.ENGLISH, "Sliced %d images\n%s", size, errInfo);
         updateText(activity, info);
         setButtonSplit(activity, true);
