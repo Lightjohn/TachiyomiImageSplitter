@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -49,7 +50,14 @@ class SplitThread extends Thread {
             updateText(activity, "Found " + imgPaths.size() + " images.\nSplitting "
                     + imagesTooBig.size() + " images");
 
-            splitImages(imagesTooBig);
+            List<Path> imagesFarTooBig = splitImages(imagesTooBig);
+            if (SPLIT_THREADS != 1) {
+                setSafe();
+                updateText(activity, "There was  " + imagesFarTooBig.size() + " Errors.\n" +
+                        "Retrying in Safe Mode");
+                List<Path> imagesThatFailed = splitImages(imagesFarTooBig);
+                updateText(activity, "Images that could not be splitted: " + imagesThatFailed.size());
+            }
         } catch (IOException e) {
             System.out.println("ERROR " + e);
         }
@@ -124,9 +132,9 @@ class SplitThread extends Thread {
         delete(path);
     }
 
-    private void splitImages(List<Path> imagesPath) {
+    private List<Path> splitImages(List<Path> imagesPath) {
         final int[] count = {0, 0}; // {countDone, countErr}
-
+        List<Path> imagesFarTooBig = new ArrayList<>();
 //        int nbCores = Runtime.getRuntime().availableProcessors();
         ExecutorService executorService = Executors.newFixedThreadPool(SPLIT_THREADS);
         int size = imagesPath.size();
@@ -135,6 +143,7 @@ class SplitThread extends Thread {
                 try {
                     splitOneImage(path);
                 } catch (Exception e) {
+                    imagesFarTooBig.add(path);
                     count[1]++;
                 }
                 updateBar(activity, imagesPath.size(), ++count[0]);
@@ -152,6 +161,7 @@ class SplitThread extends Thread {
         String info = String.format(Locale.ENGLISH, "Sliced %d images\n%s", size, errInfo);
         updateText(activity, info);
         setButtonSplit(activity, true);
+        return imagesFarTooBig;
     }
 
     private String getSplitImageName(String imagePath, int imageNumber) {

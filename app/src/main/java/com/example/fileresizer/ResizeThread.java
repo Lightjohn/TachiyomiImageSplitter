@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import static com.example.fileresizer.ThreadUtils.getAllImages;
 import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
-import static com.example.fileresizer.ThreadUtils.setButtonResize;
 import static com.example.fileresizer.ThreadUtils.updateBar;
 import static com.example.fileresizer.ThreadUtils.updateText;
 
@@ -42,7 +41,7 @@ class ResizeThread extends Thread {
     }
 
     private void resizeImages(List<Path> imagesPath) {
-        setButtonResize(activity, false);
+//        setButtonResize(activity, false);
 
         int count = 0;
         int processed = 0;
@@ -80,6 +79,6 @@ class ResizeThread extends Thread {
         }
         String info = String.format(Locale.ENGLISH, "Process %d images\nResized %d of them", imagesPath.size(), processed);
         updateText(activity, info);
-        setButtonResize(activity, true);
+//        setButtonResize(activity, true);
     }
 }

@@ -18,7 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = findViewById(R.id.resize);
+        // Resize is not as promising as I thought
+        // Splitting is much more better++
+
+        /* Button button = findViewById(R.id.resize);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 ResizeThread thread = new ResizeThread(screenWidth, MainActivity.this);
                 thread.start();
             }
-        });
+        }); */
 
         Button split = findViewById(R.id.split);
 

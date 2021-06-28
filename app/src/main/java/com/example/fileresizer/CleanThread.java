@@ -4,7 +4,10 @@ import android.app.Activity;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.fileresizer.ThreadUtils.delete;
 import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
@@ -32,7 +35,7 @@ class CleanThread extends Thread {
         count = 0;
         try {
             Files.walk(Paths.get(basePath))
-                    .filter(item -> item.getFileName().toString().compareTo(".nomedia") == 0)
+                    .filter(item -> item.getFileName().toString().toLowerCase().compareTo(".nomedia") == 0)
                     .forEach(item -> delete(item));
         } catch (IOException e) {
             e.printStackTrace();

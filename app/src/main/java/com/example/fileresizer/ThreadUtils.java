@@ -43,7 +43,8 @@ public class ThreadUtils {
     }
 
     private static boolean isImage(String fileName) {
-        return fileName.endsWith(".png") || fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".gif");
+        String fileNameLower = fileName.toLowerCase();
+        return fileNameLower.endsWith(".png") || fileNameLower.endsWith(".jpg") || fileNameLower.endsWith(".jpeg");
     }
 
     public static String getTachiyomiPath() {
@@ -62,15 +63,15 @@ public class ThreadUtils {
         });
     }
 
-    public static void setButtonResize(Activity activity, boolean enabled) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Button button = activity.findViewById(R.id.resize);
-                button.setEnabled(enabled);
-            }
-        });
-    }
+//    public static void setButtonResize(Activity activity, boolean enabled) {
+//        activity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Button button = activity.findViewById(R.id.resize);
+//                button.setEnabled(enabled);
+//            }
+//        });
+//    }
 
     public static void setButtonClean(Activity activity, boolean enabled) {
         activity.runOnUiThread(new Runnable() {

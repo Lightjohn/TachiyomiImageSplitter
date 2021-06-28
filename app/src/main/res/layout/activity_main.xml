@@ -8,61 +8,49 @@
 
     <TextView
         android:id="@+id/output"
-        android:layout_width="494dp"
-        android:layout_height="163dp"
+        android:layout_width="503dp"
+        android:layout_height="95dp"
         android:gravity="center_horizontal"
         android:text="Please hold the tablet how you would read manga"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/clean"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar"
-        app:layout_constraintVertical_bias="0.211" />
-
-    <Button
-        android:id="@+id/resize"
-        android:layout_width="189dp"
-        android:layout_height="111dp"
-        android:text="Resize"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <Button
         android:id="@+id/split"
         android:layout_width="189dp"
         android:layout_height="111dp"
         android:text="Split"
-        app:layout_constraintBottom_toTopOf="@+id/resize"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.301" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/split2"
         android:layout_width="131dp"
         android:layout_height="69dp"
+        android:layout_marginTop="76dp"
         android:text="Safe split"
-        app:layout_constraintBottom_toTopOf="@+id/resize"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.709" />
+        app:layout_constraintTop_toBottomOf="@+id/split" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="357dp"
         android:layout_height="21dp"
-        android:layout_marginTop="111dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/resize" />
+        app:layout_constraintTop_toBottomOf="@+id/split2" />
 
     <Button
         android:id="@+id/clean"
@@ -71,6 +59,7 @@
         android:text="Clean"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/output" />
 
