@@ -1,18 +1,14 @@
 package com.example.fileresizer;
 
+import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
+import static com.example.fileresizer.ThreadUtils.setButtonClean;
+import static com.example.fileresizer.ThreadUtils.updateText;
+
 import android.app.Activity;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.example.fileresizer.ThreadUtils.delete;
-import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
-import static com.example.fileresizer.ThreadUtils.setButtonClean;
-import static com.example.fileresizer.ThreadUtils.updateText;
 
 class CleanThread extends Thread {
 
@@ -36,7 +32,7 @@ class CleanThread extends Thread {
         try {
             Files.walk(Paths.get(basePath))
                     .filter(item -> item.getFileName().toString().toLowerCase().compareTo(".nomedia") == 0)
-                    .forEach(item -> delete(item));
+                    .forEach(ThreadUtils::delete);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,13 @@
 package com.example.fileresizer;
 
+import static com.example.fileresizer.ThreadUtils.delete;
+import static com.example.fileresizer.ThreadUtils.getAllImages;
+import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
+import static com.example.fileresizer.ThreadUtils.setButtonSafeSplit;
+import static com.example.fileresizer.ThreadUtils.setButtonSplit;
+import static com.example.fileresizer.ThreadUtils.updateBar;
+import static com.example.fileresizer.ThreadUtils.updateText;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,19 +18,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static com.example.fileresizer.ThreadUtils.delete;
-import static com.example.fileresizer.ThreadUtils.getAllImages;
-import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
-import static com.example.fileresizer.ThreadUtils.setButtonSplit;
-import static com.example.fileresizer.ThreadUtils.updateBar;
-import static com.example.fileresizer.ThreadUtils.updateText;
 
 class SplitThread extends Thread {
     int SPLIT_THREADS = 4;
@@ -40,15 +39,21 @@ class SplitThread extends Thread {
         try {
             updateText(activity, "Evaluating images to resize.\nPlease wait");
             setButtonSplit(activity, false);
+            setButtonSafeSplit(activity, false);
 
             List<Path> imgPaths = getAllImages(getTachiyomiPath());
             int current = 0;
+            // Trying to split in //
             List<Path> imagesTooBig = imgPaths.stream()
                     .filter(this::shouldBeSpliced)
                     .collect(Collectors.toList());
 
             updateText(activity, "Found " + imgPaths.size() + " images.\nSplitting "
                     + imagesTooBig.size() + " images");
+
+            // For the image too big, split 1 by 1
+            // First free some memory
+            System.gc();
 
             List<Path> imagesFarTooBig = splitImages(imagesTooBig);
             if (SPLIT_THREADS != 1) {
@@ -60,6 +65,9 @@ class SplitThread extends Thread {
             }
         } catch (IOException e) {
             System.out.println("ERROR " + e);
+        } finally {
+            setButtonSplit(activity, true);
+            setButtonSafeSplit(activity, true);
         }
     }
 
@@ -160,7 +168,6 @@ class SplitThread extends Thread {
         String errInfo = count[1] == 0 ? "" : String.format(Locale.ENGLISH, "There was %d errors\nPlease re run with SAFE split", count[1]);
         String info = String.format(Locale.ENGLISH, "Sliced %d images\n%s", size, errInfo);
         updateText(activity, info);
-        setButtonSplit(activity, true);
         return imagesFarTooBig;
     }
 

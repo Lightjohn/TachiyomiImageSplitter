@@ -2,6 +2,7 @@ package com.example.fileresizer;
 
 import android.app.Activity;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,12 +17,9 @@ import java.util.stream.Collectors;
 
 public class ThreadUtils {
     public static void updateText(Activity activity, String message) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView text = activity.findViewById(R.id.output);
-                text.setText(message);
-            }
+        activity.runOnUiThread(() -> {
+            TextView text = activity.findViewById(R.id.output);
+            text.setText(message);
         });
     }
 
@@ -29,15 +27,15 @@ public class ThreadUtils {
         String projectDirAbsolutePath = Paths.get(basePath).toAbsolutePath().toString();
         Path resourcesPath = Paths.get(projectDirAbsolutePath, ".");
         try {
-            List localFiles = Files.list(resourcesPath)
+            List<Path> localFiles = Files.list(resourcesPath)
                     .collect(Collectors.toList());
-            localFiles.stream().forEach(System.out::println);
+            localFiles.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return Files.walk(Paths.get(basePath))
-                .filter(item -> Files.isRegularFile(item))
+                .filter(Files::isRegularFile)
                 .filter(item -> isImage(item.toString()))
                 .collect(Collectors.toList());
     }
@@ -53,13 +51,10 @@ public class ThreadUtils {
     }
 
     public static void updateBar(Activity activity, int max, int current) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ProgressBar bar = activity.findViewById(R.id.progressBar);
-                bar.setMax(max);
-                bar.setProgress(current);
-            }
+        activity.runOnUiThread(() -> {
+            ProgressBar bar = activity.findViewById(R.id.progressBar);
+            bar.setMax(max);
+            bar.setProgress(current);
         });
     }
 
@@ -74,22 +69,23 @@ public class ThreadUtils {
 //    }
 
     public static void setButtonClean(Activity activity, boolean enabled) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Button button = activity.findViewById(R.id.clean);
-                button.setEnabled(enabled);
-            }
+        activity.runOnUiThread(() -> {
+            Button button = activity.findViewById(R.id.clean);
+            button.setEnabled(enabled);
         });
     }
 
     public static void setButtonSplit(Activity activity, boolean enabled) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Button button = activity.findViewById(R.id.split);
-                button.setEnabled(enabled);
-            }
+        activity.runOnUiThread(() -> {
+            Button button = activity.findViewById(R.id.split);
+            button.setEnabled(enabled);
+        });
+    }
+
+    public static void setButtonSafeSplit(Activity activity, boolean enabled) {
+        activity.runOnUiThread(() -> {
+            Button button = activity.findViewById(R.id.safesplit);
+            button.setEnabled(enabled);
         });
     }
 
@@ -100,5 +96,11 @@ public class ThreadUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int getHeight(Activity activity) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return dm.heightPixels;
     }
 }

@@ -1,5 +1,10 @@
 package com.example.fileresizer;
 
+import static com.example.fileresizer.ThreadUtils.getAllImages;
+import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
+import static com.example.fileresizer.ThreadUtils.updateBar;
+import static com.example.fileresizer.ThreadUtils.updateText;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,11 +15,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.fileresizer.ThreadUtils.getAllImages;
-import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
-import static com.example.fileresizer.ThreadUtils.updateBar;
-import static com.example.fileresizer.ThreadUtils.updateText;
-
 class ResizeThread extends Thread {
     int expectedWidth;
     Activity activity;
@@ -23,7 +23,6 @@ class ResizeThread extends Thread {
         this.expectedWidth = expectedWidth;
         this.activity = activity;
     }
-
 
 
     public void run() {

@@ -1,14 +1,11 @@
 package com.example.fileresizer;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.work.WorkManager;
-
 import android.Manifest;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -39,45 +36,34 @@ public class MainActivity extends AppCompatActivity {
 
         Button split = findViewById(R.id.split);
 
-        split.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkPermissions();
+        split.setOnClickListener(view -> {
+            checkPermissions();
 
-                Display display = getWindowManager().getDefaultDisplay();
-                int screenHeight = display.getHeight();
+            int screenHeight = ThreadUtils.getHeight(MainActivity.this);
 
-                SplitThread thread = new SplitThread(screenHeight, MainActivity.this);
-                thread.start();
-            }
+            SplitThread thread = new SplitThread(screenHeight, MainActivity.this);
+            thread.start();
         });
 
-        Button safeSplit = findViewById(R.id.split2);
+        Button safeSplit = findViewById(R.id.safesplit);
 
-        safeSplit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkPermissions();
+        safeSplit.setOnClickListener(view -> {
+            checkPermissions();
 
-                Display display = getWindowManager().getDefaultDisplay();
-                int screenHeight = display.getHeight();
+            int screenHeight = ThreadUtils.getHeight(MainActivity.this);
 
-                SplitThread thread = new SplitThread(screenHeight, MainActivity.this);
-                thread.setSafe();
-                thread.start();
-            }
+            SplitThread thread = new SplitThread(screenHeight, MainActivity.this);
+            thread.setSafe();
+            thread.start();
         });
 
         Button clean = findViewById(R.id.clean);
 
-        clean.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkPermissions();
+        clean.setOnClickListener(view -> {
+            checkPermissions();
 
-                CleanThread thread = new CleanThread(MainActivity.this);
-                thread.start();
-            }
+            CleanThread thread = new CleanThread(MainActivity.this);
+            thread.start();
         });
     }
 
