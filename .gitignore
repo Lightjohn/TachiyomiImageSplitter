@@ -74,8 +74,6 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
-.gradle
-gradle
 .DS_Store
 /build
 /captures
