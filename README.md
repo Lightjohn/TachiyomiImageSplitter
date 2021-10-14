@@ -11,7 +11,7 @@ Path should be set in your home `Tachiyomi` folder.
 
 # Splitting
 
-By default the application is splitting images in parrallel on four threads.
+By default the application is splitting images in parallel on four threads.
 
 In Safe mode it will do them one by one.
 
@@ -21,6 +21,13 @@ Not working: this button was supposed to remove `.nomedia` files which prevent s
 when mounting tablet on a PC.
 
 But `.nomedia` can't be accessed normally. 
+
+
+# Installing
+
+Some self generated apk are available [HERE](https://github.com/Lightjohn/TachiyomiImageSplitter/releases)
+
+To install them you will need to enable *install from unknown source* 
 
 
 # Note
