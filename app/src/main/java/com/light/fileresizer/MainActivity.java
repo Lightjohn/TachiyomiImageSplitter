@@ -1,4 +1,4 @@
-package com.example.fileresizer;
+package com.light.fileresizer;
 
 import android.Manifest;
 import android.os.Bundle;

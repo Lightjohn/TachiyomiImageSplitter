@@ -1,12 +1,12 @@
-package com.example.fileresizer;
+package com.light.fileresizer;
 
-import static com.example.fileresizer.ThreadUtils.delete;
-import static com.example.fileresizer.ThreadUtils.getAllImages;
-import static com.example.fileresizer.ThreadUtils.getTachiyomiPath;
-import static com.example.fileresizer.ThreadUtils.setButtonSafeSplit;
-import static com.example.fileresizer.ThreadUtils.setButtonSplit;
-import static com.example.fileresizer.ThreadUtils.updateBar;
-import static com.example.fileresizer.ThreadUtils.updateText;
+import static com.light.fileresizer.ThreadUtils.delete;
+import static com.light.fileresizer.ThreadUtils.getAllImages;
+import static com.light.fileresizer.ThreadUtils.getTachiyomiPath;
+import static com.light.fileresizer.ThreadUtils.setButtonSafeSplit;
+import static com.light.fileresizer.ThreadUtils.setButtonSplit;
+import static com.light.fileresizer.ThreadUtils.updateBar;
+import static com.light.fileresizer.ThreadUtils.updateText;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
