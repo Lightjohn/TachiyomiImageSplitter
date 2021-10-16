@@ -3,6 +3,7 @@ package com.light.fileresizer;
 import static com.light.fileresizer.ThreadUtils.delete;
 import static com.light.fileresizer.ThreadUtils.getAllImages;
 import static com.light.fileresizer.ThreadUtils.getTachiyomiPath;
+import static com.light.fileresizer.ThreadUtils.setButtonFolderSplit;
 import static com.light.fileresizer.ThreadUtils.setButtonSafeSplit;
 import static com.light.fileresizer.ThreadUtils.setButtonSplit;
 import static com.light.fileresizer.ThreadUtils.updateBar;
@@ -27,11 +28,12 @@ class SplitThread extends Thread {
     int SPLIT_THREADS = 4;
     int expectedHeight;
     Activity activity;
+    String workingPath;
 
-
-    SplitThread(int expectedHeight, Activity activity) {
+    SplitThread(String workingPath, int expectedHeight, Activity activity) {
         this.expectedHeight = expectedHeight;
         this.activity = activity;
+        this.workingPath = workingPath;
     }
 
 
@@ -40,8 +42,9 @@ class SplitThread extends Thread {
             updateText(activity, "Evaluating images to resize.\nPlease wait");
             setButtonSplit(activity, false);
             setButtonSafeSplit(activity, false);
+            setButtonFolderSplit(activity, false);
 
-            List<Path> imgPaths = getAllImages(getTachiyomiPath());
+            List<Path> imgPaths = getAllImages(this.workingPath);
             int current = 0;
             // Trying to split in //
             List<Path> imagesTooBig = imgPaths.stream()
@@ -68,6 +71,7 @@ class SplitThread extends Thread {
         } finally {
             setButtonSplit(activity, true);
             setButtonSafeSplit(activity, true);
+            setButtonFolderSplit(activity, true);
         }
     }
 

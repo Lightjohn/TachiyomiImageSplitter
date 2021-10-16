@@ -89,6 +89,13 @@ public class ThreadUtils {
         });
     }
 
+    public static void setButtonFolderSplit(Activity activity, boolean enabled) {
+        activity.runOnUiThread(() -> {
+            Button button = activity.findViewById(R.id.foldersplit);
+            button.setEnabled(enabled);
+        });
+    }
+
     public static void delete(Path path) {
         System.out.println("Deleting " + path.toString());
         try {

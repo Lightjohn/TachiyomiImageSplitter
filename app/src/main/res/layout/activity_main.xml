@@ -4,63 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/output"
-        android:layout_width="503dp"
-        android:layout_height="95dp"
-        android:gravity="center_horizontal"
-        android:text="Please hold the tablet how you would read manga"
-        app:layout_constraintBottom_toTopOf="@+id/clean"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
-
-    <Button
-        android:id="@+id/split"
-        android:layout_width="189dp"
-        android:layout_height="111dp"
-        android:text="Split"
+    <LinearLayout
+        android:id="@+id/verticallayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/safesplit"
-        android:layout_width="131dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="76dp"
-        android:text="Safe split"
-        app:layout_constraintBottom_toTopOf="@+id/progressBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/split" />
+        <Button
+            android:id="@+id/split"
+            android:layout_width="189dp"
+            android:layout_height="111dp"
+            android:text="Split" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="357dp"
-        android:layout_height="21dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/safesplit" />
+        <Button
+            android:id="@+id/safesplit"
+            android:layout_width="131dp"
+            android:layout_height="69dp"
+            android:text="Safe split" />
 
-    <Button
-        android:id="@+id/clean"
-        android:layout_width="132dp"
-        android:layout_height="63dp"
-        android:text="Clean"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/output" />
+        <Button
+            android:id="@+id/foldersplit"
+            android:layout_width="131dp"
+            android:layout_height="69dp"
+            android:layout_marginBottom="20dp"
+            android:text="Split folder" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="357dp"
+            android:layout_height="21dp" />
+
+        <TextView
+            android:id="@+id/output"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:gravity="center_horizontal"
+            android:text="Please hold the tablet how you would read manga" />
+
+        <Button
+            android:id="@+id/clean"
+            android:layout_width="132dp"
+            android:layout_height="63dp"
+            android:text="Clean" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
