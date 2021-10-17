@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ class SplitThread extends Thread {
 
     public void run() {
         try {
+            System.out.println("DEBUG: working path: " + this.workingPath);
             updateText(activity, "Evaluating images to resize.\nPlease wait");
             setButtonSplit(activity, false);
             setButtonSafeSplit(activity, false);
