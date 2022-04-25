@@ -30,24 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         checkPermissions();
 
-        // Resize is not as promising as I thought
-        // Splitting is much more better++
-
-        /* Button button = findViewById(R.id.resize);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Display display = getWindowManager().getDefaultDisplay();
-                int screenWidth = display.getWidth();
-//                WorkManager.getInstance(MainActivity.this).beginWith()
-
-                ResizeThread thread = new ResizeThread(screenWidth, MainActivity.this);
-                thread.start();
-            }
-        }); */
-
         Button split = findViewById(R.id.split);
 
         split.setOnClickListener(view -> {
@@ -73,13 +55,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
             intent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
             startActivityForResult(intent, READ_REQUEST_CODE);
-        });
-
-        Button clean = findViewById(R.id.clean);
-
-        clean.setOnClickListener(view -> {
-            CleanThread thread = new CleanThread(MainActivity.this);
-            thread.start();
         });
     }
 
