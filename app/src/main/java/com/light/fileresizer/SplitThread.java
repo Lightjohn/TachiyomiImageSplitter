@@ -2,7 +2,6 @@ package com.light.fileresizer;
 
 import static com.light.fileresizer.ThreadUtils.delete;
 import static com.light.fileresizer.ThreadUtils.getAllImages;
-import static com.light.fileresizer.ThreadUtils.getTachiyomiPath;
 import static com.light.fileresizer.ThreadUtils.setButtonFolderSplit;
 import static com.light.fileresizer.ThreadUtils.setButtonSafeSplit;
 import static com.light.fileresizer.ThreadUtils.setButtonSplit;
@@ -15,15 +14,12 @@ import android.graphics.BitmapFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 class SplitThread extends Thread {
     int SPLIT_THREADS = 4;
@@ -37,7 +33,6 @@ class SplitThread extends Thread {
         this.workingPath = workingPath;
     }
 
-
     public void run() {
         try {
             System.out.println("DEBUG: working path: " + this.workingPath);
@@ -46,12 +41,14 @@ class SplitThread extends Thread {
             setButtonSafeSplit(activity, false);
             setButtonFolderSplit(activity, false);
 
-            List<Path> imgPaths = getAllImages(this.workingPath);
-            int current = 0;
+            List<String> imgPaths = getAllImages(this.workingPath);
             // Trying to split in //
-            List<Path> imagesTooBig = imgPaths.stream()
-                    .filter(this::shouldBeSpliced)
-                    .collect(Collectors.toList());
+            List<String> imagesTooBig = new ArrayList<>();
+            for (String path : imgPaths) {
+                if (shouldBeSpliced(path)) {
+                    imagesTooBig.add(path);
+                }
+            }
 
             updateText(activity, "Found " + imgPaths.size() + " images.\nSplitting "
                     + imagesTooBig.size() + " images");
@@ -60,12 +57,12 @@ class SplitThread extends Thread {
             // First free some memory
             System.gc();
 
-            List<Path> imagesFarTooBig = splitImages(imagesTooBig);
+            List<String> imagesFarTooBig = splitImages(imagesTooBig);
             if (SPLIT_THREADS != 1) {
                 setSafe();
                 updateText(activity, "There was  " + imagesFarTooBig.size() + " Errors.\n" +
                         "Retrying in Safe Mode");
-                List<Path> imagesThatFailed = splitImages(imagesFarTooBig);
+                List<String> imagesThatFailed = splitImages(imagesFarTooBig);
                 updateText(activity, "Images that could not be splitted: " + imagesThatFailed.size());
             }
         } catch (IOException e) {
@@ -91,8 +88,8 @@ class SplitThread extends Thread {
         return new int[]{width, height};
     }
 
-    private boolean shouldBeSpliced(Path path) {
-        int[] imageDimension = getImageSizeWithoutLoading(path.toString());
+    private boolean shouldBeSpliced(String path) {
+        int[] imageDimension = getImageSizeWithoutLoading(path);
         int imageHeight = imageDimension[1];
         return imageHeight > expectedHeight;
 
@@ -105,11 +102,8 @@ class SplitThread extends Thread {
         return BitmapFactory.decodeFile(imagePath);
     }
 
-
-    private void splitOneImage(Path path) {
+    private void splitOneImage(String imagePath) {
         // At this point we know the image is too big
-        String imagePath = path.toString();
-
         Bitmap image = loadBitmap(imagePath);
         int bitmapSizeMb = image.getByteCount() / (1024 * 1024);
         int imageWidth = image.getWidth();
@@ -143,24 +137,27 @@ class SplitThread extends Thread {
             System.out.println(splitImagePath + " written");
         }
 
-        delete(path);
+        delete(imagePath);
     }
 
-    private List<Path> splitImages(List<Path> imagesPath) {
+    private List<String> splitImages(final List<String> imagesPath) {
         final int[] count = {0, 0}; // {countDone, countErr}
-        List<Path> imagesFarTooBig = new ArrayList<>();
+        final List<String> imagesFarTooBig = new ArrayList<>();
 //        int nbCores = Runtime.getRuntime().availableProcessors();
         ExecutorService executorService = Executors.newFixedThreadPool(SPLIT_THREADS);
         int size = imagesPath.size();
-        for (Path path : imagesPath) {
-            executorService.submit(() -> {
-                try {
-                    splitOneImage(path);
-                } catch (Exception e) {
-                    imagesFarTooBig.add(path);
-                    count[1]++;
+        for (final String path : imagesPath) {
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        SplitThread.this.splitOneImage(path);
+                    } catch (Exception e) {
+                        imagesFarTooBig.add(path);
+                        count[1]++;
+                    }
+                    updateBar(activity, imagesPath.size(), ++count[0]);
                 }
-                updateBar(activity, imagesPath.size(), ++count[0]);
             });
         }
         updateBar(activity, size, size);    // Making sure that bar is fully loaded
@@ -187,5 +184,4 @@ class SplitThread extends Thread {
         }
         throw new IllegalArgumentException("Input image is not a known format: " + imagePath);
     }
-
 }

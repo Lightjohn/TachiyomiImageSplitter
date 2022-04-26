@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,36 +26,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String tachiyomiPath = getTachiyomiPath();
-        int screenHeight = ThreadUtils.getHeight(MainActivity.this);
+        final String tachiyomiPath = getTachiyomiPath();
+        final int screenHeight = ThreadUtils.getHeight(MainActivity.this);
 
         checkPermissions();
 
         Button split = findViewById(R.id.split);
 
-        split.setOnClickListener(view -> {
-            SplitThread thread = new SplitThread(tachiyomiPath, screenHeight, MainActivity.this);
-            thread.start();
+        split.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SplitThread thread = new SplitThread(tachiyomiPath, screenHeight, MainActivity.this);
+                thread.start();
+            }
         });
 
         Button safeSplit = findViewById(R.id.safesplit);
 
-        safeSplit.setOnClickListener(view -> {
-            SplitThread thread = new SplitThread(tachiyomiPath, screenHeight, MainActivity.this);
-            thread.setSafe();
-            thread.start();
+        safeSplit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SplitThread thread = new SplitThread(tachiyomiPath, screenHeight, MainActivity.this);
+                thread.setSafe();
+                thread.start();
+            }
         });
 
         Button folderSplit = findViewById(R.id.foldersplit);
 
-        folderSplit.setOnClickListener(view -> {
+        folderSplit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-            // Asking user for folder path
-            Intent intent = new Intent(getBaseContext(), FilePickerActivity.class);
-            intent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
-            intent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
-            intent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
-            startActivityForResult(intent, READ_REQUEST_CODE);
+                // Asking user for folder path
+                Intent intent = new Intent(MainActivity.this.getBaseContext(), FilePickerActivity.class);
+                intent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+                intent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+                intent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+                MainActivity.this.startActivityForResult(intent, READ_REQUEST_CODE);
+            }
         });
     }
 
@@ -64,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
 
         switch(requestCode) {
             case READ_REQUEST_CODE:
+                if (data == null) {
+                    System.out.println("Select folder was cancelled");
+                    return;
+                }
                 System.out.println("Test Result URI " + data.getData());
                 Uri uri = data.getData();
                 String folderPath = uri.getPath();
@@ -81,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void checkPermissions() {
         String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
@@ -92,6 +105,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
 }
